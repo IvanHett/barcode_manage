@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Market Stock</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Small supermarket inventory</p>
+          <h1>Market Stock</h1>
+        </div>
+        <div class="header-actions">
+          <button class="icon-button" id="exportBtn" type="button" title="Export products">
+            <span aria-hidden="true">↓</span>
+          </button>
+          <label class="icon-button file-action" title="Import products">
+            <span aria-hidden="true">↑</span>
+            <input id="importFile" type="file" accept="application/json">
+          </label>
+        </div>
+      </header>
+
+      <section class="scan-band" aria-label="Barcode scanner">
+        <div class="scanner">
+          <video id="camera" muted playsinline></video>
+          <div class="scan-frame" aria-hidden="true"></div>
+          <p id="scanStatus">Camera scanner is ready.</p>
+        </div>
+        <div class="scan-panel">
+          <div class="field">
+            <label for="barcodeInput">Barcode</label>
+            <div class="inline-field">
+              <input id="barcodeInput" autocomplete="off" inputmode="numeric" placeholder="Scan or type barcode">
+              <button id="startScanBtn" type="button">Scan</button>
+            </div>
+          </div>
+          <div class="quick-actions">
+            <button id="stopScanBtn" type="button" disabled>Stop camera</button>
+            <button id="clearFormBtn" type="button">New product</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <form id="productForm" class="product-form">
+          <div class="section-heading">
+            <h2 id="formTitle">Add product</h2>
+            <span id="matchBadge" class="badge">New barcode</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="field wide">
+              <label for="nameInput">Product name</label>
+              <input id="nameInput" required placeholder="Milk 1L">
+            </div>
+            <div class="field">
+              <label for="categoryInput">Category</label>
+              <input id="categoryInput" list="categoryOptions" placeholder="Dairy">
+              <datalist id="categoryOptions">
+                <option value="Bakery"></option>
+                <option value="Dairy"></option>
+                <option value="Frozen"></option>
+                <option value="Fruit & vegetables"></option>
+                <option value="Household"></option>
+                <option value="Meat"></option>
+                <option value="Snacks"></option>
+              </datalist>
+            </div>
+            <div class="field">
+              <label for="priceInput">Price</label>
+              <input id="priceInput" required min="0" step="0.01" type="number" placeholder="1.99">
+            </div>
+            <div class="field">
+              <label for="stockInput">Stock count</label>
+              <input id="stockInput" required min="0" step="1" type="number" placeholder="24">
+            </div>
+            <div class="field">
+              <label for="reorderInput">Reorder level</label>
+              <input id="reorderInput" min="0" step="1" type="number" placeholder="5">
+            </div>
+            <div class="field">
+              <label for="expiryInput">Expiry date</label>
+              <input id="expiryInput" type="date">
+            </div>
+            <div class="field">
+              <label for="supplierInput">Supplier</label>
+              <input id="supplierInput" placeholder="Cash & carry">
+            </div>
+            <div class="field wide">
+              <label for="notesInput">Notes</label>
+              <textarea id="notesInput" rows="3" placeholder="Shelf location, pack size, VAT notes..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="primary" type="submit">Save product</button>
+            <button id="deleteBtn" class="danger" type="button" hidden>Delete</button>
+          </div>
+        </form>
+
+        <aside class="inventory-panel">
+          <div class="section-heading">
+            <h2>Inventory</h2>
+            <span id="productCount" class="badge">0 items</span>
+          </div>
+          <div class="filters">
+            <input id="searchInput" placeholder="Search name, barcode, category">
+            <select id="statusFilter" aria-label="Filter inventory">
+              <option value="all">All products</option>
+              <option value="low">Low stock</option>
+              <option value="expiring">Expiring soon</option>
+              <option value="expired">Expired</option>
+            </select>
+          </div>
+          <div id="productList" class="product-list" aria-live="polite"></div>
+        </aside>
+      </section>
+    </main>
+
+    <template id="productCardTemplate">
+      <button class="product-card" type="button">
+        <span class="card-main">
+          <strong class="card-name"></strong>
+          <span class="card-meta"></span>
+        </span>
+        <span class="card-side">
+          <span class="card-price"></span>
+          <span class="card-stock"></span>
+        </span>
+      </button>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
